@@ -1,0 +1,7 @@
+customer_id,region,revenue,orders
+1001,North,1200,4
+1002,South,850,3
+1003,West,,5
+1004,East,1100,4
+1002,South,850,3
+1005,North,1350,6
