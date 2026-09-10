@@ -1,0 +1,16 @@
+customer_id,transaction_date,amount,day_of_week,hour,week_num,month,month_name,day_of_month,days_since_last_purchase
+C001,2025-01-15 14:30:45,150.5,Wednesday,14,3,1,January,15,0
+C002,2025-01-16 10:15:20,200.0,Thursday,10,3,1,January,16,8
+C001,2025-01-20 18:45:10,75.25,Monday,18,4,1,January,20,0
+C003,2025-01-22 12:10:30,320.0,Wednesday,12,4,1,January,22,11
+C002,2025-01-25 15:20:45,180.75,Saturday,15,4,1,January,25,8
+C004,2025-02-01 09:30:15,95.5,Saturday,9,5,2,February,1,4
+C001,2025-02-05 20:10:25,250.0,Wednesday,20,6,2,February,5,0
+C003,2025-02-08 11:45:30,125.25,Saturday,11,6,2,February,8,11
+C002,2025-02-12 16:30:00,210.0,Wednesday,16,7,2,February,12,8
+C004,2025-02-15 13:15:45,175.5,Saturday,13,7,2,February,15,4
+C001,2025-02-20 19:20:10,300.0,Thursday,19,8,2,February,20,0
+C003,2025-02-22 10:45:20,145.75,Saturday,10,8,2,February,22,11
+C002,2025-02-25 17:10:35,225.0,Tuesday,17,9,2,February,25,8
+C004,2025-03-01 14:25:50,190.0,Saturday,14,9,3,March,1,4
+C001,2025-03-05 21:15:30,275.5,Wednesday,21,10,3,March,5,0
