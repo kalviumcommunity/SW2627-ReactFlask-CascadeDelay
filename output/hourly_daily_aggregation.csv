@@ -1,0 +1,16 @@
+day_of_week,hour,sum,count,mean
+Monday,18,75.25,1,75.25
+Saturday,9,95.5,1,95.5
+Saturday,10,145.75,1,145.75
+Saturday,11,125.25,1,125.25
+Saturday,13,175.5,1,175.5
+Saturday,14,190.0,1,190.0
+Saturday,15,180.75,1,180.75
+Thursday,10,200.0,1,200.0
+Thursday,19,300.0,1,300.0
+Tuesday,17,225.0,1,225.0
+Wednesday,12,320.0,1,320.0
+Wednesday,14,150.5,1,150.5
+Wednesday,16,210.0,1,210.0
+Wednesday,20,250.0,1,250.0
+Wednesday,21,275.5,1,275.5
