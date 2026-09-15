@@ -1,0 +1,34 @@
+
+Revenue Distribution Analysis
+=============================
+
+Skewness: 8.31
+Interpretation: Highly right-skewed
+
+Mean revenue: $411.65
+Median revenue: $250.96
+
+The median should be preferred over the mean when describing the typical customer.
+
+Kurtosis: 126.63
+Heavy tails indicate extreme revenue observations.
+
+99th percentile: $2480.11
+Maximum revenue: $11530.28
+
+Business Interpretation:
+The right-skewed distribution indicates that most customers
+generate relatively modest revenue while a smaller group of
+customers generates disproportionately large revenue.
+
+Therefore, the mean can overstate what a typical customer
+is worth. The median provides a better representation of
+the typical customer.
+
+The high-value segment may represent enterprise or
+strategically important accounts. These customers may
+require dedicated account management, retention programs,
+and customized pricing or service.
+
+Business Action:
+Segment customers into lower-value and enterprise/high-value groups and use different retention, pricing, and marketing strategies.
