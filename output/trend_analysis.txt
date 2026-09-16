@@ -1,0 +1,22 @@
+
+TREND ANALYSIS
+==============
+
+Rolling Average Trend: UP
+Change over latest 30-day rolling period: 9.52%
+Latest month-over-month growth: 5.91%
+
+Daily Revenue Volatility:
+$1,807.14 standard deviation
+
+Business Interpretation:
+The smoothed revenue trend is increasing, suggesting positive underlying momentum despite daily fluctuations.
+
+Business Action:
+Investigate which products, customers, or channels are contributing to growth and evaluate whether successful strategies can be sustained.
+
+Important:
+Daily revenue contains short-term noise. The 7-day and
+30-day rolling averages provide a smoother view of the
+underlying business trend. The 30-day average is less
+sensitive to individual daily spikes or drops.
