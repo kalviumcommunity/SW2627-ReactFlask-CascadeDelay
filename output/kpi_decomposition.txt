@@ -1,0 +1,25 @@
+
+KPI DECOMPOSITION: TOTAL REVENUE
+
+Level 1 - Total Revenue:
+$268,542.19
+
+Level 2 - Revenue by Customer Segment:
+customer_type
+SMB           138356.61
+Startup        78742.68
+Enterprise     51442.90
+
+Level 3 - Revenue by Product:
+product
+Product_A    92988.84
+Product_C    89684.87
+Product_B    85868.48
+
+Validation:
+Segment revenue sums to total revenue:
+$268,542.19
+
+The decomposition allows stakeholders to move
+from the overall KPI to the customer segments
+and products responsible for the result.
