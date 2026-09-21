@@ -1,0 +1,91 @@
+
+JOIN STRATEGY DOCUMENTATION
+
+Base tables:
+- customers: 1000 rows
+- orders: 5000 rows
+- order_items: detailed order line items
+- products: product reference data
+
+Decision 1: customers LEFT JOIN orders
+--------------------------------------------------
+Purpose:
+Get all customers together with their order history.
+
+Base customers:
+1000
+
+Orders:
+5000
+
+Grouped result:
+1000 customers
+
+Orders per customer:
+5.00
+
+Why LEFT JOIN:
+Every customer must remain in the customer-level
+analysis, including customers who have never ordered.
+
+Business use:
+Customer lifetime value, segmentation, and customer
+activity analysis.
+
+Decision 2: orders LEFT JOIN order_items
+--------------------------------------------------
+Purpose:
+Connect each order to its detailed line items.
+
+The relationship is one-to-many because one order can
+contain multiple products.
+
+Business use:
+Product revenue, inventory analysis, and order detail.
+
+Risk:
+Aggregating order-level values after joining to multiple
+line items can duplicate those order-level values.
+
+Decision 3: orders + order_items + products
+--------------------------------------------------
+Purpose:
+Create a complete order-line-product dataset.
+
+The join expands from orders to order items because an
+order can contain multiple items.
+
+Business use:
+Product-level revenue and product performance.
+
+Validation:
+Enterprise line totals were compared with an independent
+SQL aggregation.
+
+Difference:
+$0.00
+
+Result:
+The multi-table join passed the duplication check.
+
+Unmatched-key analysis:
+- Customers without orders: 6
+- Orphaned orders: 50
+
+JOIN TYPE MEANINGS
+--------------------------------------------------
+INNER JOIN:
+Returns only records with matching keys in both tables.
+
+LEFT JOIN:
+Returns every record from the left table and matching
+records from the right table.
+
+FULL OUTER JOIN:
+Returns every record from both tables, including
+unmatched records.
+
+Validation principle:
+Row counts must be checked before and after every join.
+Unexpected increases can indicate one-to-many relationships
+or accidental duplication.

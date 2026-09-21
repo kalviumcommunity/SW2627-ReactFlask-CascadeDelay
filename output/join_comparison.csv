@@ -1,0 +1,4 @@
+join_type,row_count
+INNER,4950
+LEFT,4956
+FULL OUTER,5006
