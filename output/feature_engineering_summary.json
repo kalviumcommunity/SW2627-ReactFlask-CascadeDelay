@@ -1,0 +1,33 @@
+{
+  "input_file": "data/raw/customer_data.csv",
+  "output_file": "data/processed/customer_features.csv",
+  "validation": {
+    "engagement_tier_distribution": {
+      "medium": 18,
+      "low": 2,
+      "high": 0
+    },
+    "rfm_score_range": {
+      "min": 3,
+      "max": 15
+    },
+    "missing_values": {
+      "engagement_tier": 0,
+      "spend_quartile": 0,
+      "rfm_score": 0
+    },
+    "validation_passed": true
+  },
+  "features_created": [
+    "transactions_per_month",
+    "avg_spend_per_transaction",
+    "lifetime_value_per_month",
+    "engagement_tier",
+    "spend_quartile",
+    "recency_score",
+    "frequency_score",
+    "monetary_score",
+    "rfm_score"
+  ],
+  "status": "passed"
+}
