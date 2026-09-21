@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-09-21T10:19:41.826025",
+  "filepath": "data/raw/sample.csv",
+  "dtypes_before": {
+    "customer_id": "int64",
+    "customer_name": "str",
+    "transaction_date": "str",
+    "amount": "str",
+    "is_active": "int64"
+  },
+  "conversions": {
+    "transaction_date": {
+      "passed": true,
+      "message": "transaction_date converted to datetime"
+    },
+    "amount": {
+      "passed": true,
+      "message": "amount converted to float"
+    },
+    "is_active": {
+      "passed": true,
+      "message": "is_active converted to boolean"
+    }
+  },
+  "dtypes_after": {
+    "customer_id": "int64",
+    "customer_name": "str",
+    "transaction_date": "datetime64[ns]",
+    "amount": "float64",
+    "is_active": "bool"
+  },
+  "type_validation": {
+    "transaction_date": {
+      "expected": "datetime64[ns]",
+      "actual": "datetime64[ns]",
+      "passed": true
+    },
+    "amount": {
+      "expected": "float64",
+      "actual": "float64",
+      "passed": true
+    },
+    "is_active": {
+      "expected": "bool",
+      "actual": "bool",
+      "passed": true
+    }
+  },
+  "ready_for_analysis": true
+}
