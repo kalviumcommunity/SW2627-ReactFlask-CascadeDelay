@@ -1,0 +1,11 @@
+,,correlation
+engagement,transactions_per_month,0.9997784894584948
+transactions_per_month,engagement,0.9997784894584948
+transactions_per_month,days_since_last_purchase,0.9982998193355267
+days_since_last_purchase,transactions_per_month,0.9982998193355267
+engagement,days_since_last_purchase,0.9980763148905902
+days_since_last_purchase,engagement,0.9980763148905902
+engagement,total_spent,0.9978241511517066
+total_spent,engagement,0.9978241511517066
+transactions_per_month,total_spent,0.9975676252446675
+total_spent,transactions_per_month,0.9975676252446675

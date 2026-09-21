@@ -1,0 +1,85 @@
+{
+  "correlation_is_not_causation": true,
+  "principle": "Correlation shows that variables move together. It does not prove that one variable causes another.",
+  "strong_relationships": [
+    {
+      "variable_1": "engagement",
+      "variable_2": "transactions_per_month",
+      "correlation": 0.9998,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "transactions_per_month",
+      "variable_2": "engagement",
+      "correlation": 0.9998,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "transactions_per_month",
+      "variable_2": "days_since_last_purchase",
+      "correlation": 0.9983,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "days_since_last_purchase",
+      "variable_2": "transactions_per_month",
+      "correlation": 0.9983,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "engagement",
+      "variable_2": "days_since_last_purchase",
+      "correlation": 0.9981,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "days_since_last_purchase",
+      "variable_2": "engagement",
+      "correlation": 0.9981,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "engagement",
+      "variable_2": "total_spent",
+      "correlation": 0.9978,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "total_spent",
+      "variable_2": "engagement",
+      "correlation": 0.9978,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "transactions_per_month",
+      "variable_2": "total_spent",
+      "correlation": 0.9976,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    },
+    {
+      "variable_1": "total_spent",
+      "variable_2": "transactions_per_month",
+      "correlation": 0.9976,
+      "direction": "positive",
+      "interpretation": "Variables move together, but the correlation alone does not establish causation."
+    }
+  ],
+  "support_tickets_churn": {
+    "correlation": 0.8532,
+    "possible_directions": [
+      "support_tickets -> churn",
+      "churn -> support_tickets",
+      "customer_pain -> both"
+    ],
+    "warning": "Support tickets should not be interpreted as causing churn solely from correlation."
+  }
+}
