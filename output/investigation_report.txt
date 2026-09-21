@@ -1,0 +1,40 @@
+
+ROOT CAUSE INVESTIGATION REPORT
+
+OBSERVATION
+-----------
+Revenue drop detected on 2025-01-15
+
+Time Window:
+14:00 - 15:00
+
+ANALYSIS
+--------
+Affected Payment Method:
+credit_card
+
+Top Error:
+Stripe API timeout
+
+PATTERN
+-------
+Failures concentrated in:
+- credit_card
+- Problem hour only
+- Not all customer segments
+
+HYPOTHESIS
+----------
+External payment processor outage
+likely caused transaction failures.
+
+RECOMMENDATIONS
+---------------
+1. Add backup payment processor
+2. Monitor processor health
+3. Configure failover
+4. Alert operations team
+
+CONFIDENCE
+----------
+High
