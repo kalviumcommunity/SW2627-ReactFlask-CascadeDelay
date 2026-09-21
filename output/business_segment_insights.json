@@ -1,0 +1,26 @@
+{
+    "Enterprise": {
+        "customer_count": 5,
+        "avg_ltv": 151600.0,
+        "churn_rate": 0.0,
+        "avg_tickets": 2.4,
+        "avg_retention": 718.0,
+        "action": "Maintain premium support and focus on retention because this segment has high lifetime value and low churn."
+    },
+    "SMB": {
+        "customer_count": 8,
+        "avg_ltv": 8500.0,
+        "churn_rate": 0.5,
+        "avg_tickets": 7.375,
+        "avg_retention": 315.0,
+        "action": "Improve onboarding and provide efficient support because this segment has moderate lifetime value and comparatively higher churn."
+    },
+    "Startup": {
+        "customer_count": 10,
+        "avg_ltv": 2190.0,
+        "churn_rate": 0.4,
+        "avg_tickets": 5.1,
+        "avg_retention": 241.0,
+        "action": "Emphasize self-service resources and education because this segment has lower lifetime value and shorter retention."
+    }
+}
