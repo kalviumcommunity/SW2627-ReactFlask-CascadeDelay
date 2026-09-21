@@ -1,0 +1,11 @@
+{
+  "column": "revenue",
+  "zscore_threshold": 3,
+  "zscore_outliers": 1,
+  "iqr_lower_bound": -187.5,
+  "iqr_upper_bound": 872.5,
+  "iqr_outliers": 1,
+  "combined_outliers": 1,
+  "handling_strategy": "cap",
+  "timestamp": "2026-09-21T11:09:45.862044"
+}
