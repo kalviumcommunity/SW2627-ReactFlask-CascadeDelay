@@ -290,6 +290,147 @@ comparison = {
 * [Record Linkage Library](https://recordlinkage.readthedocs.io/) - Probabilistic matching for detecting near-duplicates with fuzzy matching.
 * [Data Quality Assessment Guide](https://www.gartner.com/en/information-technology/glossary/data-quality) - Frameworks for measuring and monitoring data quality over time.
 
+---
+
+## String Cleaning & Text Normalisation
+
+### Overview
+
+Hey Data Cleaner!
+
+Welcome. Your data is validated and types enforced. Now comes the meticulous work of string cleaning: the spaces before names that break groupby, the inconsistent casing (`"JOHN"`, `"john"`, `"John"`) that creates three categories instead of one, and the special characters hiding in text fields. Real-world text is messy. You must clean it deliberately.
+
+Every analyst who skipped string cleaning, who thought "close enough" was good enough, or who ran groupby aggregations on uncleaned text and got wrong segment counts had the same problem: text diversity masqueraded as data volume. This guide covers building transformation pipelines that strip whitespace, normalize casing, remove special characters with regex, standardize categorical labels using mapping dictionaries, and build reusable functions that clean any text column consistently.
+
+---
+
+### The Real Scenario
+
+#### The Problem
+* **Inconsistent Categorical Values:** A dataset has a `product_category` column with values like `" Electronics "`, `"electronics"`, `"ELECTRONICS"`, and `"electro nics"`. An analyst runs `.value_counts()` and expects 3 categories, but gets 7 instead, artificially inflating category counts.
+* **Hidden Whitespace:** A `customer_name` column has trailing spaces (`" John "`) that break exact string matching.
+* **Special Characters & Encoding Artifacts:** A city field contains characters like `"São Paulo"` or `"Montréal"` that can disappear or corrupt in certain export formats.
+* **Spelling Inconsistencies:** The marketing team uses `"B2B"`, `"b2b"`, and `"B 2 B"` interchangeably.
+* **Impact:** Groupby aggregations produce inaccurate results, skewing downstream analysis and business reporting.
+
+#### The Solution
+* A string cleaning pipeline that applies transformations consistently:
+  * `.str.strip()` removes leading/trailing whitespace.
+  * `.str.lower()` normalizes casing.
+  * Regular expressions remove special characters.
+  * Mapping dictionaries standardize spelling variations.
+* Wrap all operations into reusable functions so the pipeline can clean future datasets reliably. Groupby operations now produce accurate, dependable counts.
+
+---
+
+### Why String Cleaning Matters
+
+*Text Consistency as Data Quality Foundation*
+
+* **Dirty Text:**
+  * Whitespace variation, mixed casing, special characters, and spelling inconsistencies.
+  * Groupby operations treat each variation as a separate unique category.
+  * Results in inflated segment counts, unreliable aggregations, and incorrect business metrics.
+
+* **Clean Text:**
+  * Whitespace stripped, casing normalized, special characters handled, and spelling standardized.
+  * Groupby operations produce accurate counts and trustworthy metrics.
+
+#### Four String Cleaning Fundamentals
+
+1. **Strip Whitespace:** Eliminates invisible leading/trailing noise that breaks equality and joins.
+2. **Normalize Casing:** Makes text matching case-insensitive and standard across categories.
+3. **Remove Special Characters:** Prevents encoding corruption and parsing discrepancies.
+4. **Canonical Mapping:** Converts multiple historical spelling variants into a single standard label.
+
+---
+
+### Building the String Cleaning Pipeline
+
+*Transformation Step by Step*
+
+#### 1. Strip Whitespace
+Leading and trailing spaces are invisible but break exact matching. Always remove them:
+
+```python
+df['category'] = df['category'].str.strip()
+# " Electronics " -> "Electronics"
+```
+
+#### 2. Normalize Casing
+Make casing consistent. Lowercase is standard for categorical comparisons:
+
+```python
+df['name'] = df['name'].str.lower()
+# "John", "JOHN", "john" -> all become "john"
+```
+
+#### 3. Remove Special Characters with Regex
+The regex pattern `[^a-zA-Z0-9 ]` removes anything that is not a letter, number, or space (the caret `^` inside brackets denotes negation):
+
+```python
+df['city'] = df['city'].str.replace('[^a-zA-Z0-9 ]', '', regex=True)
+# "São Paulo" -> "So Paulo"
+# "Montréal" -> "Montreal"
+```
+
+#### 4. Map Spelling Variations to Canonical Form
+Standardize disparate variants to a single agreed-upon value:
+
+```python
+segment_map = {
+    'b2b': 'B2B',
+    'b 2 b': 'B2B',
+    'b2 b': 'B2B',
+    'business-to-business': 'B2B'
+}
+df['segment'] = df['segment'].map(segment_map)
+```
+
+---
+
+### Creating a Reusable Pipeline
+
+*Function-Based String Cleaning*
+
+Wrap transformations in reusable functions rather than hardcoding them inline.
+
+#### Template Pipeline Function
+
+```python
+def clean_text_column(series, 
+                      lowercase=True, 
+                      strip=True, 
+                      remove_special=False,
+                      mapping=None):
+    """Reusable text cleaning function for pandas Series."""
+    result = series.copy()
+    
+    if strip:
+        result = result.str.strip()
+    
+    if lowercase:
+        result = result.str.lower()
+    
+    if remove_special:
+        result = result.str.replace('[^a-zA-Z0-9 ]', '', regex=True)
+    
+    if mapping:
+        result = result.map(mapping)
+    
+    return result
+```
+
+#### Applying to Multiple Columns
+
+```python
+# Clean customer name with whitespace stripping and lowercasing
+df['name'] = clean_text_column(df['name'], lowercase=True, strip=True)
+
+# Standardize product categories via canonical mapping
+df['category'] = clean_text_column(df['category'], mapping=category_map)
+```
+
 ## Future Updates
 
 This README will be updated after each milestone to reflect the actual features, implementation, screenshots, setup instructions, and project progress.
