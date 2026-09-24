@@ -181,6 +181,115 @@ def document_ingestion(df, source):
 * **Shape:** Row and column counts verify if the dataset is of expected size (e.g., discovering 1M rows instead of 1K indicates an upstream schema/export change).
 * **Dtypes:** Verifies column types match expectations (e.g., a column loaded as `string` / `object` instead of `numeric` indicates dirty data or delimiter/encoding issues).
 
+---
+
+## Duplicate Detection & Record Deduplication
+
+### Overview
+
+Hey Data Engineer!
+
+Welcome. Your data is validated, ingested, profiled, documented, nulls handled, and types enforced. One final problem blocks analysis: duplicates. A customer appears twice in the database. A transaction is imported twice from different sources. A row is accidentally duplicated during a merge. These exact and near-duplicates distort every metric — customer count inflates, revenue doubles, and analysis conclusions become unreliable. You must detect them, decide which version to keep, and log all removals for audit and compliance.
+
+Every analysis broken by duplicate records, every count that did not match reality, and every KPI that stakeholders questioned had one thing in common: duplicates entered the pipeline and were never caught before analysis began. This lesson teaches you to detect and remove duplicates defensibly. You will identify exact duplicates using `.duplicated()`, find near-duplicates by key columns, implement deduplication logic preserving the best record, log all removals for audit purposes, and compare before/after metrics.
+
+---
+
+### The Real Scenario
+
+#### The Problem
+* **Unexpected Duplications:** A customer database contains 10,000 records. An analyst runs analysis and gets 10,500 unique customers. Where did the 500 extra come from?
+* **Exact Duplicates:** Investigation reveals 250 exact duplicates where every field matches (data imported twice by mistake).
+* **Near Duplicates:** Another 250 near-duplicates where the same customer is recorded under slightly different names (e.g., `JOHN` vs `JOHN SMITH`).
+* **Lost Trust & Untracked Removals:** Nobody tracked which duplicates were removed. Analysis completed before duplicates were noticed. Conclusions about customer count, revenue per customer, and churn rates are all wrong. Trust erodes, and fixing requires redoing analysis without knowing what was previously removed.
+
+#### The Solution
+* A deduplication workflow that detects exact duplicates using `.duplicated()`.
+* Identifies near-duplicates by matching on key columns (e.g., `customer_id` + `date`).
+* Removes duplicates keeping the most complete or most recent record.
+* Logs all removals to an audit file for compliance (`output/removed_duplicates_audit.csv`).
+* Documents the impact with before/after row counts.
+* Everything is traceable: when someone asks *"Where did that record go?"*, you can answer with certainty: *"It was a duplicate of record X, removed on date Y."*
+
+---
+
+### Exact vs Near Duplicates
+
+*Identifying What to Remove and How*
+
+* **Exact Duplicates:**
+  * Every field is identical. Same `customer_id`, same transaction amount, same date.
+  * Accidental import from a source system that sends data twice.
+  * **Action:** Remove all but first (or most recent, or most complete depending on strategy).
+
+* **Near Duplicates:**
+  * Same key columns (`customer_id`, `transaction_date`) but different other values.
+  * Same transaction recorded with slightly different amounts or descriptions.
+  * **Action:** Merge into a single record or keep the most complete version based on business logic.
+
+#### Detection and Removal Pattern
+
+```python
+import pandas as pd
+
+# Exact duplicates
+exact_dup_count = df.duplicated().sum()
+df = df.drop_duplicates(keep='first')  # Keep 'first', 'last', or False to remove all
+
+# Near-duplicates on key
+dup_keys = df[df.duplicated(subset=['customer_id'], keep=False)]
+df = df.drop_duplicates(subset=['customer_id'], keep='first')
+```
+
+---
+
+### Deduplication Strategy and Audit Trail
+
+*Keeping the Best Record and Documenting Removals*
+
+#### Deduplication Strategies
+* **Keep First:** Preserve original record. Use when the first entry is the most reliable.
+* **Keep Last:** Preserve most recent record. Use when later updates are corrections.
+* **Keep Most Complete:** Preserve record with fewest nulls. Use for merging incomplete data from multiple sources.
+* **Decision:** Choose based on business logic. Document your choice so downstream analysts know what was kept and why.
+
+#### Audit Trail Logging
+
+```python
+# Save every removed record
+removed = df_original[~df_original.index.isin(df_dedup.index)]
+removed.to_csv('output/removed_duplicates_audit.csv', index=False)
+
+# Document impact
+pct = (len(removed) / len(df_original)) * 100
+print(f"Before: {len(df_original):,} rows")
+print(f"After: {len(df_dedup):,} rows")
+print(f"Removed: {len(removed):,} ({pct:.1f}%)")
+```
+
+> **Audit Trail Principle:** Answers *"Where is that record?"* $\rightarrow$ *"Duplicate of X, removed date Y."*
+
+#### Before / After Comparison
+
+Log metrics showing deduplication impact so results are traceable:
+
+```python
+comparison = {
+    'rows_before': len(df_original),
+    'rows_after': len(df_dedup),
+    'rows_removed': len(df_original) - len(df_dedup),
+    'removal_pct': round((len(df_original) - len(df_dedup)) / len(df_original) * 100, 2)
+}
+```
+
+---
+
+### Bonus Resources
+
+* [Pandas Duplicated Documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.duplicated.html) - Complete reference for `.duplicated()` with all `keep` parameter options.
+* [Record Linkage Library](https://recordlinkage.readthedocs.io/) - Probabilistic matching for detecting near-duplicates with fuzzy matching.
+* [Data Quality Assessment Guide](https://www.gartner.com/en/information-technology/glossary/data-quality) - Frameworks for measuring and monitoring data quality over time.
+
 ## Future Updates
 
 This README will be updated after each milestone to reflect the actual features, implementation, screenshots, setup instructions, and project progress.
