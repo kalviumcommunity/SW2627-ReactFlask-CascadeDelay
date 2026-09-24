@@ -431,6 +431,133 @@ df['name'] = clean_text_column(df['name'], lowercase=True, strip=True)
 df['category'] = clean_text_column(df['category'], mapping=category_map)
 ```
 
+---
+
+## Date & Time Transformation Pipeline
+
+### Overview
+
+Hey Timestamp Parser!
+
+Welcome. Text is clean. Now comes temporal data: timestamps stored as strings that cannot be grouped by week, hours as integers that cannot measure elapsed time, and dates across timezones that confuse aggregations. Parsing dates unlocks time-based analysis. You must extract features: day-of-week, hour-of-day, week number, compute elapsed time, and enable time-series aggregation.
+
+Every analyst who tried to group by week on string dates and failed, who computed hour-of-day manually in loops instead of using `.dt.hour`, or who lost data to timezone confusion had the same problem: they did not parse timestamps immediately. This lesson teaches you to parse dates first, extract features, and compute metrics. You will convert strings to datetime, extract day-of-week and hour-of-day, compute days-since-event, perform resample operations on time-indexed data, and build features that support meaningful time-series analysis.
+
+---
+
+### The Real Scenario
+
+#### The Problem
+* **Grouping Failure on String Dates:** A transaction dataset has a `transaction_date` column stored as strings (`"2025-01-15 14:30:45"`). An analyst tries to group by week using `.resample('W')` and hits an error because resampling requires a datetime index.
+* **Slow Manual Parsing Loops:** Another analyst needs to analyze peak transaction hours. Without parsed datetime objects, they manually split strings and extract hour numbers in a Python loop across 100k rows — extremely slow and error-prone.
+* **Inability to Compute Elapsed Time:** Marketing needs to know "days since last purchase" for each customer, but dates are stored as strings. Recency calculations require datetime arithmetic, which strings cannot support. Analysis stalls completely.
+
+#### The Solution
+* Parse all timestamps immediately into Pandas `datetime64` types.
+* Use the `.dt` accessor to extract features instantly:
+  * `.dt.day_name()` for day-of-week name.
+  * `.dt.hour` for hour-of-day (0–23).
+  * `.dt.isocalendar().week` for calendar week number.
+* Compute elapsed time using datetime arithmetic: `(today - purchase_date).dt.days`.
+* Set datetime as the DataFrame index so `.resample()` works seamlessly.
+* Groupby operations on hour, week, and day now execute vectorially without loops, making time-series analysis fast and natural.
+
+---
+
+### Why Datetime Parsing Matters
+
+*From String to Temporal Analysis*
+
+* **String Dates:**
+  * Cannot group by week or month.
+  * Cannot extract hour directly.
+  * Cannot compute elapsed time or recency.
+  * Requires slow, error-prone manual string parsing. Time-series analysis is impossible.
+
+* **Parsed Datetime:**
+  * `.resample()` works instantly.
+  * Instant feature extraction via `.dt.hour`, `.dt.day_name()`, etc.
+  * Vectorized arithmetic for elapsed time (`.dt.days`).
+  * Groupby operations by temporal dimensions work naturally and at native speed.
+
+#### The `.dt` Accessor
+Once a column is converted to datetime type, the `.dt` accessor unlocks dozens of temporal attributes: day name, month, year, week, day of year, hour, minute, second. All are available instantly and computed vectorially.
+
+---
+
+### Extracting Time-Based Features
+
+*Features from Parsed Datetime*
+
+#### 1. Parse First — Always
+
+```python
+import pandas as pd
+
+df['transaction_date'] = pd.to_datetime(
+    df['transaction_date'], 
+    format='%Y-%m-%d %H:%M:%S'
+)
+# Now the .dt accessor is available
+```
+
+#### 2. Extract Day of Week
+
+```python
+# String name of the day (Monday, Tuesday, etc.)
+df['day_of_week'] = df['transaction_date'].dt.day_name()
+
+# Or numeric version (0=Monday, 6=Sunday)
+df['dow_numeric'] = df['transaction_date'].dt.dayofweek
+```
+
+#### 3. Extract Hour of Day
+
+```python
+# 0-23 representing midnight to 11pm
+df['hour'] = df['transaction_date'].dt.hour
+```
+
+#### 4. Compute Time Since Event
+
+```python
+today = pd.Timestamp.now()
+# Datetime arithmetic produces timedelta; .dt.days extracts integer days
+df['days_since_purchase'] = (today - df['transaction_date']).dt.days
+```
+
+#### 5. Time-Series Aggregation with Resample
+
+```python
+# Set datetime as index
+df_ts = df.set_index('transaction_date')
+
+# Resample to weekly and sum transaction amounts
+# Frequency aliases: 'W' = week, 'D' = day, 'ME'/'M' = month, 'h'/'H' = hour
+weekly_revenue = df_ts['amount'].resample('W').sum()
+```
+
+---
+
+### Advanced Time Features
+
+*Week Number, Month, and Fiscal Features*
+
+```python
+# Extract calendar week number, month, and quarter
+df['week_num'] = df['transaction_date'].dt.isocalendar().week
+df['month'] = df['transaction_date'].dt.month
+df['quarter'] = df['transaction_date'].dt.quarter
+```
+
+---
+
+### Bonus Resources
+
+* [Pandas to_datetime Documentation](https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html) - Complete reference for `pd.to_datetime()` with format codes and parsing parameters.
+* [Pandas .dt Accessor Documentation](https://pandas.pydata.org/docs/reference/api/pandas.Series.dt.html) - Official guide for temporal Series properties and methods.
+* [Pandas Time Series / Date Functionality](https://pandas.pydata.org/docs/user_guide/timeseries.html) - Comprehensive guide to time series, resample, and offset aliases.
+
 ## Future Updates
 
 This README will be updated after each milestone to reflect the actual features, implementation, screenshots, setup instructions, and project progress.
