@@ -115,7 +115,7 @@ fig.update_layout(
 
 st.plotly_chart(
     fig,
-    use_container_width=True
+    width="stretch"
 )
 
 
@@ -164,5 +164,5 @@ st.dataframe(
             "order_amount"
         ]
     ],
-    use_container_width=True
+    width="stretch"
 )

@@ -1,54 +1,60 @@
-# CascadeDelay
+# DataLens — From Dataset to Insights
 
-A simple logistics analytics system designed to identify operational routes that are likely to cause cascading delivery delays.
+DataLens is a connected, local-first analytics product. Upload a CSV or JSON dataset, inspect its quality, clean it without changing the raw source, calculate KPIs, explore trends and segments, validate metrics with SQLite, generate evidence-based insights, and export a report.
 
-## Problem
+For a simple explanation of the purpose, workflow, CSV requirements, and presentation steps, read [process.md](process.md).
 
-A logistics company maintains shipment scans, delay reports, and warehouse transfer records separately. Because this information is disconnected, it is difficult to identify routes and warehouse operations that repeatedly contribute to downstream delivery delays.
+## What Works Now
 
-## Objective
+- CSV and JSON ingestion with clear errors
+- Dataset profiling, data dictionary, duplicate and missing-value checks
+- Non-destructive cleaning and date feature engineering
+- Schema-flexible KPI, distribution, correlation, segment, and trend analysis
+- SQLite Python-versus-SQL revenue validation
+- Evidence-based insight cards, threshold alerts, and Markdown reports
+- One bundled demo dataset available immediately from `data/raw/transactions.csv`
 
-Build a simple system that combines logistics data and helps identify:
+## Run Locally
 
-* Delayed shipments
-* Frequently delayed routes
-* Warehouse transfer issues
-* Routes with a higher risk of cascading delays
+```bash
+python -m venv .venv
+\.venv\Scripts\activate
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-## Tech Stack
+The application opens with the single bundled demo dataset. Use the sidebar uploader to process a new CSV or JSON file. The original upload is held as the raw DataFrame and the cleaned analysis copy is generated separately.
 
-* **Frontend:** React
-* **Backend:** Flask
-* **Database:** SQLite
+For a headless pipeline run:
 
-## Project Status
+```bash
+python run_pipeline.py
+```
 
-🚧 **Milestone 1 — Initial Setup**
+## Architecture
 
-The project is currently in the initial setup stage. Features and implementation details will be added as development progresses.
-
-## Planned Features
-
-* Shipment and route data management
-* Delay tracking
-* Warehouse transfer tracking
-* Route delay analysis
-* Cascading delay risk identification
-* Simple dashboard for viewing logistics insights
+`app.py` is the Streamlit product shell. `datalens/core.py` owns ingestion, profiling, cleaning, transformations, metrics, segmentation, insight generation, report generation, and SQL validation. The supported presentation workflow uses this shared core and the single `transactions.csv` demo; older files in `scripts/` are historical coursework utilities rather than the application entry point.
 
 ## Project Structure
 
 ```text
-CascadeDelay/
-├── frontend/
-├── backend/
-├── database/
+DataLens/
+├── app.py
+├── datalens/core.py
+├── tests/test_datalens_core.py
+├── data/raw/
+├── data/processed/
+├── scripts/
 └── README.md
 ```
 
-## Getting Started
+## Testing
 
-Setup instructions will be added as the project development progresses.
+```bash
+python -m pytest -q
+```
+
+The tests cover raw-data preservation, duplicate removal, KPI calculation, Python/SQL reconciliation, and explicit unavailable states for unsupported schemas.
 
 ## CSV & JSON Data Ingestion
 
